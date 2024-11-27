@@ -1,0 +1,63 @@
+import xarray as xr
+from pathlib import Path
+import numpy as np
+import seaborn as sns
+from scipy.stats import linregress
+c1 = Path(r'G:\ML\ERA5_PI\en4PI')
+list1 = list(c1.glob('*.nc'))
+
+import matplotlib.pyplot as plt
+import pandas as pd
+# c1 = xr.open_dataset('G:\ML\EN4')
+all4 = xr.open_dataset(list1[0])['vmax'].sel(longitude=np.arange(120,180,2),latitude=np.arange(0,40),method='nearest')
+for i in list1[1:]:
+    all2 = xr.open_dataset(i)['vmax'].sel(longitude=np.arange(120,180,2),latitude=np.arange(0,40),method='nearest')
+    # if pd.Timestamp(all2['time'][0].values).year==2001 or pd.Timestamp(all2['time'][0].values).year==2002 or pd.Timestamp(all2['time'][0].values).year==2003:
+    #     all2 = all2.drop('expver')
+    all4 = xr.concat((all4,all2),dim='time')
+a6 = all4.isel(time=slice(5,-1,12)).mean(('latitude','longitude'))
+a7 = all4.isel(time=slice(6,-1,12)).mean(('latitude','longitude'))
+a8 = all4.isel(time=slice(7,-1,12)).mean(('latitude','longitude'))
+a9 = all4.isel(time=slice(8,-1,12)).mean(('latitude','longitude'))
+a10 = all4.isel(time=slice(9,-1,12)).mean(('latitude','longitude'))
+a11 = all4.isel(time=slice(10,-1,12)).mean(('latitude','longitude'))
+a12 = np.vstack((a6.values,a7.values,a8.values,a9.values,a10.values,a11.values))
+a12 = a12.mean(axis=0)
+a14 = []
+for i in range(35):
+    a13 = a12[0+i:i+9].mean()
+    a14.append(a13)
+# plt.plot(a14)
+
+import xarray as xr
+from pathlib import Path
+import numpy as np
+c1 = Path(r'G:\ML\merra2_PI\EN4PI')
+list1 = list(c1.glob('*.nc'))
+# c1 = xr.open_dataset('G:\ML\EN4')
+all1 = xr.open_dataset(list1[0])['vmax'].sel(lon=np.arange(120,180,2),lat=np.arange(0,40),method='nearest').isel(time=slice(5,11))
+for i in list1[1:]:
+    all2 = xr.open_dataset(i)['vmax'].sel(lon=np.arange(120,180,2),lat=np.arange(0,40),method='nearest').isel(time=slice(5,11))
+    all1 = xr.concat((all1,all2),dim='new')
+a1 = all1.mean(('time','lon','lat'))
+a5 = []
+for i in range(35):
+    a2 = np.nanmean(a1[0+i:9+i])
+    a5.append(a2)
+
+
+import xarray as xr
+from pathlib import Path
+import numpy as np
+c1 = Path(r'G:\ML\ncep_PI\EN4PI')
+list1 = list(c1.glob('*.nc'))
+# c1 = xr.open_dataset('G:\ML\EN4')
+all1 = xr.open_dataset(list1[0])['vmax'].sel(lon=np.arange(120,180,2),lat=np.arange(0,40),method='nearest').isel(time=slice(5,11))
+for i in list1[1:]:
+    all2 = xr.open_dataset(i)['vmax'].sel(lon=np.arange(120,180,2),lat=np.arange(0,40),method='nearest').isel(time=slice(5,11))
+    all1 = xr.concat((all1,all2),dim='new')
+a1 = all1.mean(('time','lon','lat'))
+a6 = []
+for i in range(35):
+    a2 = np.nanmean(a1[0+i:9+i])
+    a6.append(a2)
