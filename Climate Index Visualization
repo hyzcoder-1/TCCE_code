@@ -1,0 +1,56 @@
+import matplotlib.pyplot as plt
+import numpy as np
+fig = plt.figure(figsize=(12,6),dpi=600)
+ax = fig.add_subplot(311)
+x = np.arange(1985,2020)
+sns.regplot(x=x,y=PDO,ax = ax,color='hotpink',ci=95,scatter=False,label='PDO')
+ax.plot(x,PDO,c='hotpink')
+ax.scatter(x,PDO,c='hotpink')
+x = np.arange(1985,2020)
+ax2 = ax.twinx()
+ax2.plot(x,GW,c='green')
+ax2.scatter(x,GW,c='green')
+sns.regplot(x=x,y=GW,ax = ax2,color='green',ci=95,scatter=False,label='GW')
+x = np.arange(1985,2020)
+ax.plot(x,AMO,c='deepskyblue')
+ax.scatter(x,AMO,c='deepskyblue')
+sns.regplot(x=x,y=AMO,ax = ax,color='deepskyblue',ci=95,scatter=False,label='AMO')
+# ax.set_ylabel('GODAS_OCPI(m s$^{-1}$)',fontsize=15)
+ax2.tick_params(axis='y', colors='green')
+handles1, labels1 = ax.get_legend_handles_labels()
+handles2, labels2 = ax2.get_legend_handles_labels()
+
+# 合并句柄和标签
+handles = list((handles1[0],handles2[0],handles1[1]))
+labels = list((labels1[0],labels2[0],labels1[1]))
+
+# 在ax1或ax2上添加合并后的图例
+ax.legend(handles, labels, loc='center right')
+ax.text(0, 1, '(a)', horizontalalignment='left', verticalalignment='bottom', transform=ax.transAxes)
+
+ax = fig.add_subplot(312)
+name_list =['TOTAL','GW','PDO','AMO']
+num_list = [0.94,0.57,0.43,0.01]
+x =list(range(len(num_list)))
+ax.set_ylim([0,1])
+ax.bar(x, num_list,tick_label = name_list,fc = 'gray')
+ax.errorbar(x, num_list,
+			yerr=[0.06,0.067,0.051,0.02],
+            capsize = 8,
+			fmt='o', color="k") 
+# ax.set_title('Reletive importance',loc='left')
+ax.set_xticks([])
+ax.text(0, 1, '(b)', horizontalalignment='left', verticalalignment='bottom', transform=ax.transAxes)
+ax = fig.add_subplot(313)
+name_list = ['TOTAL','GW','PDO','AMO']
+num_list = [0.9511,0.6083,0.3814,0.0103]
+x =list(range(len(num_list)))
+ax.set_ylim([0,1])
+ax.bar(x, num_list,tick_label = name_list,fc = 'gray')
+ax.errorbar(x, num_list,
+			yerr=[0.034,0.06,0.071,0.03],
+            capsize = 8,
+			fmt='o', color="k") 
+# ax.set_title('Reletive importance',loc='left')
+# ax.set_xticks([])
+ax.text(0, 1, '(c)', horizontalalignment='left', verticalalignment='bottom', transform=ax.transAxes)
